@@ -1,0 +1,17 @@
+* {
+    margin: 0;
+    border: 0;
+
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.charts {
+    width: 700px; 
+    height: 400px;
+}
