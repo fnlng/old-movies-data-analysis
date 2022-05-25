@@ -5,33 +5,77 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></link>
+    <link rel="stylesheet" href="../static/style.css">
     <script src="https://cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
     <script type="text/javascript" src="https://assets.pyecharts.org/assets/echarts.min.js"></script>
     <title>Document</title>
 </head>
 <body>
-    <!-- {% if name %}
-    <h1>Hello {{ name }}!</h1>
-    {% else %}
-    <h1>Hello world!</h1>
-    {% endif %} -->
+    <div class="header">
+        {% if name %}
+        <h1>Hello {{ name }}!</h1>
+        {% else %}
+        <h1>Hello world!</h1>
+        {% endif %}
+    </div>
+    <div class="content">
+        <div class="left">
+            <ul>
+                <li id="eval">evaluate analysis</li>
+                <li id="year">year count</li>
+                <li id="works">works count</li>
+                <li id="type">type count</li>
+                <li id="evator">evaluator count</li>
+            </ul>
+        </div>
+        <div class="center">
+            <div id="charts">
 
-    <div id="bar" class="charts"></div>
+            </div>
+        </div>
+    </div>
     <script>
-        $(
-            function () {
-                var chart = echarts.init(document.getElementById('bar'), 'white', {renderer: 'canvas'});
-                $.ajax({
+        var chart = echarts.init(document.getElementById('charts'), 'white', {renderer: 'canvas'});
+        $(function(){
+            
+            $('#eval').click(
+                function (){
+                    fetchCharts('distribution');
+                }
+            )
+            $('#year').click(
+                function (){
+                    fetchCharts('year');
+                }
+            )
+            $('#works').click(
+                function (){
+                    fetchCharts('year');
+                }
+            )
+            $('#type').click(
+                function (){
+                    fetchCharts('year');
+                }
+            )
+            $('#evator').click(
+                function (){
+                    fetchCharts('most-evaluators');
+                }
+            )
+        });
+
+        function fetchCharts(field){
+            $('#charts').removeAttr('_echarts_instance_');
+            $.ajax({
                     type: "GET",
-                    url: "http://127.0.0.1:5000/counts",
+                    url: "http://127.0.0.1:5000/" + field,
                     dataType: 'json',
                     success: function (result) {
                         chart.setOption(result);
                     }
                 });
-            }
-        )
-
+        }
     </script>
 </body>
 </html>

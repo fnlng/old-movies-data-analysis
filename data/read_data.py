@@ -28,7 +28,7 @@ usecols = movies_g.columns.tolist()
 
 
 def evaluate_distribution():
-    """
+    """\
     根据评分数量，评分均值画出折线图，柱状图
     根据图表对分布定性
     """
@@ -39,6 +39,7 @@ def year_count():
     按年份制作一个柱状图和折线图的合成图
     """
     movies = movies_g.dropna(subset='年份')
+    
     movies_count = {
         '1905以前': movies[  movies['年份'] < '1905' ].count()[0],
         '1905-1948': movies[ ('1905' <= movies['年份']) & (movies['年份'] <= '1948')].count()[0],
@@ -116,14 +117,15 @@ def evaluator_count():
     做一个表格
     评价人数最多的前50部电影
     """
-    movies = movies_g.dropna(subset=['标题', '总评分', '评价人数'])
+    movies = movies_g[['标题', '总评分', '评价人数']]
+    movies.dropna(how='any', inplace=True)
     for i in movies.index:
         movies.at[i, '评价人数'] = int(''.join([j for j in movies.at[i, '评价人数'] if 48<=ord(j)<=57]))
     movies.sort_values('评价人数', inplace=True, ascending=False)
     movies = movies.head(50)
     headers = ['电影名', '总评分', '评价人数']
     rows = [
-        [ t, r, e ] for t, r, e in movies[['标题', '总评分', '评价人数']]
+        [t, r, e] for _, t, r, e in movies[['标题', '总评分', '评价人数']].itertuples()
     ]
     t = (
         Table()
@@ -139,7 +141,7 @@ if __name__ == '__main__':
     from icecream import ic
     # ic.disable()
     # ic(evaluate_distribution().render())
-    # ic(year_count().render())
+    ic(year_count().render())
     # ic(works_count().render())
     # ic(type_count().render())
-    ic(evaluator_count().render())
+    # ic(evaluator_count().render())
